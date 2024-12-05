@@ -1,5 +1,10 @@
-import { buildRoutePath } from "@/utils/build-route-path";
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { completeTaskRoute } from "./complete-task-route";
+import { createTaskRoute } from "./create-task-route";
+import { deleteTaskRoute } from "./delete-task-route";
+import { getTaskRoute } from "./get-task-route";
+import { getTasksRoute } from "./get-tasks-route";
+import { updateTaskRoute } from "./update-task-route";
 
 export type Route = {
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -16,30 +21,10 @@ export type QueryParams = {
 };
 
 export const routes: Route[] = [
-  {
-    method: "GET",
-    path: buildRoutePath("/tasks"),
-    handler: async (req, res) => {
-      res.end(
-        JSON.stringify({
-          message: "Tasks",
-          params: req.params,
-          query: req.query,
-        })
-      );
-    },
-  },
-  {
-    method: "GET",
-    path: buildRoutePath("/tasks/:id"),
-    handler: async (req, res) => {
-      res.end(
-        JSON.stringify({
-          message: "Task",
-          params: req.params,
-          query: req.query,
-        })
-      );
-    },
-  },
+  getTasksRoute,
+  getTaskRoute,
+  updateTaskRoute,
+  createTaskRoute,
+  deleteTaskRoute,
+  completeTaskRoute,
 ];
