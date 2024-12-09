@@ -1,13 +1,15 @@
 import http from "node:http";
+import { body } from "./routes/middlewares/body";
 import { json } from "./routes/middlewares/json";
 import { routes } from "./routes/routes";
+import { executeMiddlewares } from "./utils/execute-middlewares";
 import { extractQueryParams } from "./utils/extract-query-params";
 import { getUrlGroups } from "./utils/get-url-groups";
 
 const PORT = 3333;
 
 const server = http.createServer(async (req, res) => {
-  json(req, res);
+  await executeMiddlewares(req, res, [json, body]);
 
   const { url, method } = req;
 
