@@ -4,5 +4,6 @@ declare module "node:http" {
   interface IncomingMessage {
     params: RouteParams;
     query: QueryParams;
+    body?: Record<string, unknown>;
   }
 }
