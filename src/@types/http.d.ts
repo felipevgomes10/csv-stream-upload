@@ -1,4 +1,11 @@
-import type { QueryParams, RouteParams } from "./routes/routes";
+type QueryParams = {
+  title: string;
+  description: string;
+};
+
+type RouteParams = {
+  id: string;
+};
 
 declare module "node:http" {
   interface IncomingMessage {

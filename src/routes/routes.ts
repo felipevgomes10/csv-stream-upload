@@ -12,14 +12,6 @@ export type Route = {
   handler: (req: IncomingMessage, res: ServerResponse) => Promise<void>;
 };
 
-export type RouteParams = {
-  id: string;
-};
-
-export type QueryParams = {
-  search: string;
-};
-
 export const routes: Route[] = [
   getTasksRoute,
   getTaskRoute,
