@@ -29,6 +29,8 @@ class Database implements IDatabase<DatabaseShape> {
 
   constructor() {
     this._database = { tasks: [] };
+
+    this.isMatch = this.isMatch.bind(this);
   }
 
   async select<TTable extends keyof DatabaseShape>(
@@ -37,16 +39,7 @@ class Database implements IDatabase<DatabaseShape> {
   ): Promise<DatabaseShape[TTable]> {
     const data = this._database[table];
 
-    const filteredData = data.filter((item) => {
-      const isMatch = Object.keys(filters).every((key) => {
-        return (
-          item[key as keyof typeof item] ===
-          filters[key as keyof typeof filters]
-        );
-      });
-
-      return isMatch;
-    });
+    const filteredData = data.filter((item) => this.isMatch(item, filters));
 
     return filteredData;
   }
@@ -68,12 +61,7 @@ class Database implements IDatabase<DatabaseShape> {
     const prevData = this._database[table];
 
     const updatedData = prevData.map((item) => {
-      const isMatch = Object.keys(filters).every((key) => {
-        return (
-          item[key as keyof typeof item] ===
-          filters[key as keyof typeof filters]
-        );
-      });
+      const isMatch = this.isMatch(item, filters);
 
       if (isMatch) return { ...item, ...data };
 
@@ -90,17 +78,39 @@ class Database implements IDatabase<DatabaseShape> {
     const prevData = this._database[table];
 
     const updatedData = prevData.filter((item) => {
-      const isMatch = Object.keys(filters).every((key) => {
+      const isMatch = this.isMatch(item, filters);
+
+      return !isMatch;
+    });
+
+    this._database[table] = updatedData;
+  }
+
+  private isMatch<TTable extends keyof DatabaseShape>(
+    data: DatabaseShape[TTable][number],
+    filters: Partial<DatabaseShape[TTable][number]>
+  ) {
+    const isMatch = Object.entries(filters)
+      .filter(([, value]) => Boolean(value))
+      .every(([key, value]) => {
+        const item = data[key as keyof typeof data];
+        const filter = value as string;
+
+        if (typeof item === "string") {
+          return item.toLowerCase().includes(filter.toLowerCase());
+        }
+
+        if (typeof item === "number") {
+          return item === Number(filter);
+        }
+
         return (
           item[key as keyof typeof item] ===
           filters[key as keyof typeof filters]
         );
       });
 
-      return !isMatch;
-    });
-
-    this._database[table] = updatedData;
+    return isMatch;
   }
 }
 
