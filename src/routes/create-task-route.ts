@@ -29,7 +29,7 @@ export const createTaskRoute: Route = {
       const { title, description } = data;
       const task = new Task({ title, description });
 
-      await database.insert("tasks", task);
+      await database.insert("tasks", task.toJSON());
 
       res.writeHead(201).end(
         JSON.stringify({
