@@ -5,9 +5,10 @@ import type { Route } from "./routes";
 export const getTasksRoute: Route = {
   method: "GET",
   path: buildRoutePath("/tasks"),
-  handler: async (_req, res) => {
+  handler: async (req, res) => {
     try {
-      const tasks = await database.select("tasks");
+      const { title, description } = req.query;
+      const tasks = await database.select("tasks", { title, description });
 
       res.writeHead(200).end(JSON.stringify({ tasks }));
     } catch (error) {
