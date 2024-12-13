@@ -58,6 +58,8 @@ export class Task {
   }
 
   set title(value: string) {
+    if (value === this._title) return;
+
     const trimmed = value.trim();
 
     if (!trimmed) throw new Error("Title is required");
@@ -67,6 +69,8 @@ export class Task {
   }
 
   set description(value: string) {
+    if (value === this._description) return;
+
     const trimmed = value.trim();
 
     if (!trimmed) throw new Error("Description is required");
