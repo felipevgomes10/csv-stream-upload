@@ -5,21 +5,25 @@ export async function body(req: IncomingMessage) {
 
   const bodyPromise = new Promise<void>((resolve, reject) => {
     req
+      .on("error", (error) => {
+        return reject(error);
+      })
       .on("data", (chunk) => {
         chunks.push(chunk);
       })
       .on("end", () => {
-        if (chunks.length === 0) return resolve();
+        try {
+          if (chunks.length === 0) return resolve();
 
-        const bodyString = Buffer.concat(chunks).toString();
-        const body = JSON.parse(bodyString);
+          const bodyString = Buffer.concat(chunks).toString();
+          const body = JSON.parse(bodyString);
 
-        req.body = body;
+          req.body = body;
 
-        return resolve();
-      })
-      .on("error", (error) => {
-        return reject(error);
+          return resolve();
+        } catch (error) {
+          return reject(error);
+        }
       });
   });
 
