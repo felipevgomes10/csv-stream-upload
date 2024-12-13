@@ -17,7 +17,9 @@ export const completeTaskRoute: Route = {
       }
 
       const updatedTask = new Task(task);
-      updatedTask.complete();
+
+      if (updatedTask.isCompleted) updatedTask.uncomplete();
+      else updatedTask.complete();
 
       await database.update("tasks", updatedTask.toJSON(), { id });
 
