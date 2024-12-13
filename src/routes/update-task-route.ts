@@ -7,7 +7,6 @@ import type { Route } from "./routes";
 const updateTaskSchema = z.object({
   title: z.string().optional(),
   description: z.string().optional(),
-  completed: z.boolean().optional(),
 });
 
 export const updateTaskRoute: Route = {
@@ -32,14 +31,11 @@ export const updateTaskRoute: Route = {
         return;
       }
 
-      const { title, description, completed } = data;
+      const { title, description } = data;
       const updatedTask = new Task(task);
 
       updatedTask.title = title ?? updatedTask.title;
       updatedTask.description = description ?? updatedTask.description;
-
-      if (completed) updatedTask.complete();
-      if (completed === false) updatedTask.uncomplete();
 
       await database.update("tasks", updatedTask.toJSON(), { id });
 
