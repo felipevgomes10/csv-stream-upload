@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { completeTaskRoute } from "./complete-task-route";
+import { createTaskBulkRoute } from "./create-task-bulk-route";
 import { createTaskRoute } from "./create-task-route";
 import { deleteTaskRoute } from "./delete-task-route";
 import { getTaskRoute } from "./get-task-route";
@@ -17,6 +18,7 @@ export const routes: Route[] = [
   getTaskRoute,
   updateTaskRoute,
   createTaskRoute,
+  createTaskBulkRoute,
   deleteTaskRoute,
   completeTaskRoute,
 ];

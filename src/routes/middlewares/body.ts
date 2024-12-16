@@ -15,8 +15,12 @@ export async function body(req: IncomingMessage) {
         try {
           if (chunks.length === 0) return resolve();
 
-          const bodyString = Buffer.concat(chunks).toString();
-          const body = JSON.parse(bodyString);
+          let body = Buffer.concat(chunks).toString();
+
+          const headers = new Map(Object.entries(req.headers));
+          const contentType = headers.get("content-type");
+
+          if (contentType === "application/json") body = JSON.parse(body);
 
           req.body = body;
 
