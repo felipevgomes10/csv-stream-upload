@@ -1,3 +1,5 @@
+import type { RouteParams } from "@/@types/http";
+
 type GetUrlGroups = { params: RouteParams; query: string };
 
 export function getUrlGroups(url: string, path: RegExp): GetUrlGroups {

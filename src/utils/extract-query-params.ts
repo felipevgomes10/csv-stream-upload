@@ -1,3 +1,5 @@
+import type { QueryParams } from "@/@types/http";
+
 export function extractQueryParams(query: string): QueryParams {
   const queryParams = query.substring(1).split("&");
 

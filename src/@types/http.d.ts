@@ -1,9 +1,9 @@
-type QueryParams = {
+export type QueryParams = {
   title: string;
   description: string;
 };
 
-type RouteParams = {
+export type RouteParams = {
   id: string;
 };
 
@@ -14,3 +14,5 @@ declare module "node:http" {
     body?: Record<string, unknown>;
   }
 }
+
+export {};
