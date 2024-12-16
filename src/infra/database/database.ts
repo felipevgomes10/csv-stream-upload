@@ -1,10 +1,10 @@
 import type { TaskData } from "@/application/entity/task/task-entity";
 
-type DatabaseShape = {
+export type DatabaseShape = {
   tasks: TaskData[];
 };
 
-interface IDatabase<TShape extends Record<string, unknown[]>> {
+export interface IDatabase<TShape extends Record<string, unknown[]>> {
   select<TTable extends keyof TShape>(
     table: TTable,
     filters?: Partial<TShape[TTable][number]>
@@ -12,6 +12,10 @@ interface IDatabase<TShape extends Record<string, unknown[]>> {
   insert<TTable extends keyof TShape>(
     table: TTable,
     data: TShape[TTable][number]
+  ): Promise<void>;
+  insertMany<TTable extends keyof TShape>(
+    table: TTable,
+    data: TShape[TTable]
   ): Promise<void>;
   update<TTable extends keyof TShape>(
     table: TTable,
@@ -51,6 +55,15 @@ class Database implements IDatabase<DatabaseShape> {
     const prevData = this._database[table];
 
     prevData.push(data as unknown as (typeof prevData)[number]);
+  }
+
+  async insertMany<TTable extends keyof DatabaseShape>(
+    table: TTable,
+    data: DatabaseShape[TTable]
+  ): Promise<void> {
+    const prevData = this._database[table];
+
+    this._database[table] = [...prevData, ...data];
   }
 
   async update<TTable extends keyof DatabaseShape>(
